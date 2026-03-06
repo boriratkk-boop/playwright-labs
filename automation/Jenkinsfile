@@ -1,0 +1,122 @@
+pipeline {
+
+ agent any
+
+ tools {
+  allure 'allure'
+ }
+
+ parameters {
+
+  choice(
+   name: 'ENV',
+   choices: ['dev','staging'],
+   description: 'Select Environment'
+  )
+
+  choice(
+   name: 'TEST_TYPE',
+   choices: ['smoke','regression','e2e'],
+   description: 'Select Test Suite'
+  )
+
+ }
+
+ stages {
+
+  stage('Checkout') {
+   steps {
+    git url: 'https://github.com/boriratkk-boop/playwright-labs.git', branch: 'main'
+   }
+  }
+
+  stage('Install Dependencies') {
+   steps {
+    dir('automation') {
+     sh 'npm install'
+     sh 'npx playwright install'
+    }
+   }
+  }
+
+  stage('Start Services') {
+   steps {
+
+    sh '''
+    echo "Starting Express Server..."
+    cd app/server
+    npm install
+    node server.js &
+
+    echo "Starting React Client..."
+    cd ../client
+    npm install
+    npm start &
+    '''
+
+   }
+  }
+
+  stage('Wait for Services') {
+   steps {
+
+    sh '''
+    echo "Waiting for services to be ready..."
+    sleep 10
+    '''
+
+   }
+  }
+
+  stage('Clean Reports') {
+  steps {
+    dir('automation') {
+      sh 'rm -rf allure-results allure-report'
+    }
+  }
+}
+
+  stage('Run Tests') {
+   steps {
+    dir('automation') {
+     sh """
+     export TEST_ENV=${params.ENV}
+     npm run ${params.TEST_TYPE}
+     """
+    }
+   }
+  }
+
+  stage('Generate Allure Report') {
+   steps {
+    dir('automation') {
+     allure includeProperties: false,
+            jdk: '',
+            results: [[path: 'allure-results']]
+    }
+   }
+  }
+
+   stage('Archive Playwright Report') {
+    steps {
+      archiveArtifacts artifacts: 'automation/playwright-report/**'
+    }
+  }
+
+/////   stage('Publish Playwright Report') {
+//     steps {
+//         publishHTML([
+//             reportDir: 'automation/playwright-report',
+//             reportFiles: 'index.html',
+//             reportName: 'Playwright Report',
+//             keepAll: true,
+//             alwaysLinkToLastBuild: true,
+//             allowMissing: true,
+//             useWrapperFileDirectly: true
+//         ])
+//     }
+// }
+
+ }
+
+}
