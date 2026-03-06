@@ -105,7 +105,8 @@ pipeline {
             reportName: 'Playwright Report',
             keepAll: true,
             alwaysLinkToLastBuild: true,
-            allowMissing: true
+            allowMissing: true,
+            useWrapperFileDirectly: true
         ])
     }
 }
