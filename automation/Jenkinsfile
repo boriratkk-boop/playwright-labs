@@ -99,7 +99,9 @@ pipeline {
 
   stage('Archive Playwright Report') {
  steps {
+  dir('automation'){
   archiveArtifacts artifacts: 'automation/playwright-report/**', allowEmptyArchive: true
+  }
  }
 }
 
