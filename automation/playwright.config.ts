@@ -75,12 +75,14 @@ export default defineConfig({
 
   webServer: [
   {
-    command: 'npm run start-server',
-    port: 4000
+    command: 'cd app/server && node server.js',
+    port: 4000,
+    reuseExistingServer: true
   },
   {
-    command: 'npm run start-client',
-    port: 3000
+    command: 'cd app/client && npm start',
+    port: 3000,
+    reuseExistingServer: true
   }
 ]
 
