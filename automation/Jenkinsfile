@@ -24,12 +24,6 @@ pipeline {
 
  stages {
 
-  stage('Checkout') {
-   steps {
-    git url: 'https://github.com/boriratkk-boop/playwright-labs.git', branch: 'main'
-   }
-  }
-
   stage('Install Dependencies') {
    steps {
     dir('automation') {
@@ -39,53 +33,55 @@ pipeline {
    }
   }
 
-  stage('Start Services') {
+  stage('Start Express Server') {
    steps {
+    dir('app/server') {
+     sh '''
+     npm install
+     node server.js &
+     '''
+    }
+   }
+  }
 
-    sh '''
-    echo "Starting Express Server..."
-    cd app/server
-    npm install
-    node server.js &
-
-    echo "Starting React Client..."
-    cd ../client
-    npm install
-    npm start &
-    '''
-
+  stage('Start React Client') {
+   steps {
+    dir('app/client') {
+     sh '''
+     npm install
+     npm start &
+     '''
+    }
    }
   }
 
   stage('Wait for Services') {
    steps {
-
     sh '''
-    echo "Waiting for services to be ready..."
-    sleep 10
+    echo "Waiting for services..."
+    sleep 15
     '''
-
    }
   }
 
   stage('Clean Reports') {
-  steps {
+   steps {
     dir('automation') {
-      sh 'rm -rf allure-results allure-report'
+     sh 'rm -rf allure-results allure-report'
     }
+   }
   }
-}
 
- stage('Run Tests') {
- steps {
-  dir('automation') {
-   sh """
-   export TEST_ENV=${params.ENV}
-   npx playwright test tests/${params.TEST_TYPE} --reporter=list,html,allure-playwright
-   """
+  stage('Run Tests') {
+   steps {
+    dir('automation') {
+     sh """
+     export TEST_ENV=${params.ENV}
+     npx playwright test tests/${params.TEST_TYPE} --reporter=list,html,allure-playwright
+     """
+    }
+   }
   }
- }
-}
 
   stage('Generate Allure Report') {
    steps {
@@ -97,36 +93,13 @@ pipeline {
    }
   }
 
-  stage('Check Report Folder') {
- steps {
-  dir('automation') {
-   sh 'ls'
-  }
- }
-}
-
   stage('Archive Playwright Report') {
- steps {
-  dir('automation') {
-   archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+   steps {
+    dir('automation') {
+     archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+    }
+   }
   }
- }
-}
-
-
-/////   stage('Publish Playwright Report') {
-//     steps {
-//         publishHTML([
-//             reportDir: 'automation/playwright-report',
-//             reportFiles: 'index.html',
-//             reportName: 'Playwright Report',
-//             keepAll: true,
-//             alwaysLinkToLastBuild: true,
-//             allowMissing: true,
-//             useWrapperFileDirectly: true
-//         ])
-//     }
-// }
 
  }
 

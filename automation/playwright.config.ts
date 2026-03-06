@@ -74,18 +74,18 @@ export default defineConfig({
     // },
   ],
 
-  webServer: [
-  {
-    command: 'cd app/server && node server.js',
-    port: 4000,
-    reuseExistingServer: true
-  },
-  {
-    command: 'cd app/client && npm start',
-    port: 3000,
-    reuseExistingServer: true
-  }
-]
+//   webServer: [
+//   {
+//     command: 'cd app/server && node server.js',
+//     port: 4000,
+//     reuseExistingServer: true
+//   },
+//   {
+//     command: 'cd app/client && npm start',
+//     port: 3000,
+//     reuseExistingServer: true
+//   }
+// ]
 
   /* Run your local dev server before starting the tests */
   // webServer: {
