@@ -39,6 +39,14 @@ pipeline {
    }
   }
 
+  stage('Clean Reports') {
+  steps {
+    dir('automation') {
+      sh 'rm -rf allure-results allure-report'
+    }
+  }
+}
+
   stage('Run Tests') {
    steps {
     dir('automation') {
