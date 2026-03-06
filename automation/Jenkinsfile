@@ -81,7 +81,7 @@ pipeline {
   dir('automation') {
    sh """
    export TEST_ENV=${params.ENV}
-   npx playwright test tests/${params.TEST_TYPE}
+   npx playwright test tests/${params.TEST_TYPE} --reporter=list,html,allure-playwright
    """
   }
  }
