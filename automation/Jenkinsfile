@@ -105,6 +105,12 @@ pipeline {
  }
 }
 
+stage('Debug Files') {
+ steps {
+  sh 'ls -R'
+ }
+}
+
 /////   stage('Publish Playwright Report') {
 //     steps {
 //         publishHTML([
