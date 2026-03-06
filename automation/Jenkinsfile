@@ -97,19 +97,11 @@ pipeline {
    }
   }
 
-  stage('Generate Playwright Report') {
+  stage('Archive Playwright Report') {
  steps {
-  dir('automation') {
-   sh 'npx playwright show-report --reporter=html'
-  }
+  archiveArtifacts artifacts: 'automation/playwright-report/**', allowEmptyArchive: true
  }
 }
-
-   stage('Archive Playwright Report') {
-    steps {
-      archiveArtifacts artifacts: 'automation/playwright-report/**'
-    }
-  }
 
 /////   stage('Publish Playwright Report') {
 //     steps {
