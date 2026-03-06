@@ -39,6 +39,35 @@ pipeline {
    }
   }
 
+  stage('Start Services') {
+   steps {
+
+    sh '''
+    echo "Starting Express Server..."
+    cd app/server
+    npm install
+    node server.js &
+
+    echo "Starting React Client..."
+    cd ../client
+    npm install
+    npm start &
+    '''
+
+   }
+  }
+
+  stage('Wait for Services') {
+   steps {
+
+    sh '''
+    echo "Waiting for services to be ready..."
+    sleep 10
+    '''
+
+   }
+  }
+
   stage('Clean Reports') {
   steps {
     dir('automation') {

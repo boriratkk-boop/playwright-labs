@@ -73,6 +73,17 @@ export default defineConfig({
     // },
   ],
 
+  webServer: [
+  {
+    command: 'npm run start-server',
+    port: 4000
+  },
+  {
+    command: 'npm run start-client',
+    port: 3000
+  }
+]
+
   /* Run your local dev server before starting the tests */
   // webServer: {
   //   command: 'npm run start',
