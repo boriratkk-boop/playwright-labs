@@ -103,7 +103,7 @@ pipeline {
     }
   }
 
-////   stage('Publish Playwright Report') {
+///   stage('Publish Playwright Report') {
 //     steps {
 //         publishHTML([
 //             reportDir: 'automation/playwright-report',
