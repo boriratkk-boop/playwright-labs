@@ -97,6 +97,14 @@ pipeline {
    }
   }
 
+  stage('Generate Playwright Report') {
+ steps {
+  dir('automation') {
+   sh 'npx playwright show-report --reporter=html'
+  }
+ }
+}
+
    stage('Archive Playwright Report') {
     steps {
       archiveArtifacts artifacts: 'automation/playwright-report/**'
