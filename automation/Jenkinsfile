@@ -97,6 +97,14 @@ pipeline {
    }
   }
 
+  stage('Check Report Folder') {
+ steps {
+  dir('automation') {
+   sh 'ls'
+  }
+ }
+}
+
   stage('Archive Playwright Report') {
  steps {
   dir('automation') {
@@ -105,11 +113,6 @@ pipeline {
  }
 }
 
-stage('Debug Files') {
- steps {
-  sh 'ls -R'
- }
-}
 
 /////   stage('Publish Playwright Report') {
 //     steps {
