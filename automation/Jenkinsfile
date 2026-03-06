@@ -39,17 +39,6 @@ pipeline {
    }
   }
 
-  stage('Kill Existing Servers') {
- steps {
-  sh '''
-  echo "Killing ports 3000 and 4000 if running..."
-
-  npx kill-port 3000 || true
-  npx kill-port 4000 || true
-  '''
- }
-}
-
   stage('Start Services') {
    steps {
 
