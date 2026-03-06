@@ -33,27 +33,23 @@ pipeline {
    }
   }
 
-  stage('Start Express Server') {
-   steps {
-    dir('app/server') {
-     sh '''
-     npm install
-     node server.js &
-     '''
-    }
-   }
-  }
+  stage('Start Services') {
+ steps {
 
-  stage('Start React Client') {
-   steps {
-    dir('app/client') {
-     sh '''
-     npm install
-     npm start &
-     '''
-    }
-   }
-  }
+  sh '''
+  echo "Starting Express Server..."
+  cd app/server
+  npm install
+  node server.js &
+
+  echo "Starting React Client..."
+  cd ../client
+  npm install
+  CI=true npm start &
+  '''
+
+ }
+}
 
   stage('Wait for Services') {
    steps {
