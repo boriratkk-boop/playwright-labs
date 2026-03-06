@@ -97,6 +97,19 @@ pipeline {
    }
   }
 
+  stage('Publish Playwright Report') {
+    steps {
+        publishHTML([
+            reportDir: 'automation/playwright-report',
+            reportFiles: 'index.html',
+            reportName: 'Playwright Report',
+            keepAll: true,
+            alwaysLinkToLastBuild: true,
+            allowMissing: true
+        ])
+    }
+}
+
  }
 
 }
