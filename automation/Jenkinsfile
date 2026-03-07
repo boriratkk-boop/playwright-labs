@@ -26,7 +26,7 @@ pipeline {
 
   stage('Checkout') {
    steps {
-    git url: 'https://github.com/boriratkk-boop/playwright-labs.git', branch: 'main'
+    git url: 'https://github.com/boriratkk-boop/playwright-labs.git', branch: 'feature/update-product-title'
    }
   }
 
