@@ -6,6 +6,6 @@ test('product list should display', async ({ page }) => {
 
   const products = page.locator('[data-testid="product-item"]')
 
-  await expect(products).toHaveCount(3)
+  await expect(products).toHaveCount(5)
 
 })
